@@ -18,7 +18,7 @@ export class ChatService {
          model: 'openai/gpt-4o-mini',
          messages,
          temperature: 0.2,
-         max_tokens: 100,
+         max_tokens: 2000,
       });
 
       // 4. Extract reply
