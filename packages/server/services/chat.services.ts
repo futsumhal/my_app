@@ -1,4 +1,15 @@
 import { ConversationRepository } from '../repository/converstaion.repository';
+import template from '../prompts/chatbot.txt';
+import fs from 'fs';
+import path from 'path';
+
+// const parkInfo= fs.readFileSync(path.join(__dirname, '..', 'prompts', 'Wonderworld.md'), 'utf-8');
+// const Instructions = template.replace('{{parkInfo}}', parkInfo);
+
+// const systemMessage = {
+//   role: "system",
+//   content: Instructions,
+// };
 
 export class ChatService {
    constructor(

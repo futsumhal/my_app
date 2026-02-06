@@ -5,6 +5,14 @@ import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import TypingIndicator from './TypingIndicator';
+import popSound from '../../assets/sounds/pop.mp3.mp3';
+import notificationSound from '../../assets/sounds/notification.mp3.wav';
+
+const popAudio = new Audio(popSound);
+popAudio.volume = 0.5; // Adjust the volume as needed
+
+const notificationAudio = new Audio(notificationSound);
+notificationAudio.volume = 0.5; // Adjust the volume as needed
 
 type FormData = {
    prompt: string;
@@ -30,11 +38,14 @@ const Chatbot = () => {
          setIsBotTyping(true);
          setError('');
          reset();
+         popAudio.play();
+
          const { data } = await axios.post('/api/chat', {
             prompt,
             sessionId: conversationId,
          });
          setMessages((prev) => [...prev, { role: 'assistant', content: data }]);
+         notificationAudio.play();
       } catch (error) {
          console.error(error);
          setError('something went wrong. please try again!');
@@ -42,7 +53,7 @@ const Chatbot = () => {
          setIsBotTyping(false);
       }
    };
-   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+   const onKeyDown = (e: React.KeyboardEvent<HTMLFormElement>) => {
       if (e.key === 'Enter' && !e.shiftKey) {
          e.preventDefault();
          handleSubmit(onSubmit)();
@@ -63,7 +74,7 @@ const Chatbot = () => {
                   key={index}
                   onCopy={onCopyMessage}
                   ref={index === messages.length - 1 ? lastMessageRef : null}
-                  className={`px-3 py-1 rounded-xl
+                  className={`px-3 py-1 max-w-md rounded-xl
                         ${
                            msg.role === 'user'
                               ? 'self-end bg-blue-600 text-white '
