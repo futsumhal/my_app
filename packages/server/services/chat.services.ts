@@ -1,15 +1,18 @@
 import { ConversationRepository } from '../repository/converstaion.repository';
-import template from '../prompts/chatbot.txt';
 import fs from 'fs';
 import path from 'path';
 
-// const parkInfo= fs.readFileSync(path.join(__dirname, '..', 'prompts', 'Wonderworld.md'), 'utf-8');
-// const Instructions = template.replace('{{parkInfo}}', parkInfo);
+const systemPrompt = fs.readFileSync(
+   path.join(__dirname, '..', 'prompts', 'chatbot.txt'),
+   'utf-8'
+);
 
-// const systemMessage = {
-//   role: "system",
-//   content: Instructions,
-// };
+const systemMessage = {
+   role: 'system' as const,
+   content:
+      `CRITICAL INSTRUCTIONS — YOU MUST FOLLOW THESE EXACTLY:\n\n` +
+      systemPrompt,
+};
 
 export class ChatService {
    constructor(
@@ -24,11 +27,11 @@ export class ChatService {
       // 2. Get conversation history
       const messages = this.conversationRepo.getOrCreate(sessionId);
 
-      // 3. Call OpenAI
+      // 3. Call OpenAI with system prompt injected
       const response = await this.client.chat.completions.create({
          model: 'openai/gpt-4o-mini',
-         messages,
-         temperature: 0.2,
+         messages: [systemMessage, ...messages],
+         temperature: 0.3, // lower = more obedient to instructions
          max_tokens: 2000,
       });
 
