@@ -41,10 +41,13 @@ const Chatbot = () => {
          }
          popAudio.play();
 
-         const { data } = await axios.post('/api/chat', {
-            prompt,
-            sessionId: conversationId,
-         });
+         const { data } = await axios.post(
+            'https://futsum-chatbot-server.onrender.com/api/chat',
+            {
+               prompt,
+               sessionId: conversationId,
+            }
+         );
 
          setMessages((prev) => [...prev, { role: 'assistant', content: data }]);
          notificationAudio.play();
