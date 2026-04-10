@@ -10,7 +10,7 @@ import dotenv from 'dotenv';
 const app = express();
 app.use(
    cors({
-      origin: 'https://my-app-client-iota.vercel.app',
+      origin: 'https://futsum-chatbot.vercel.app',
       methods: ['GET', 'POST'],
    })
 );
