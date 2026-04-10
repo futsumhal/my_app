@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import type { Request, Response } from 'express';
 import { ConversationRepository } from './repository/converstaion.repository';
 import { ChatService } from './services/chat.services';
@@ -7,6 +8,12 @@ import OpenAI from 'openai';
 import dotenv from 'dotenv';
 
 const app = express();
+app.use(
+   cors({
+      origin: 'https://my-app-client-iota.vercel.app',
+      methods: ['GET', 'POST'],
+   })
+);
 app.use(express.json());
 
 const client = new OpenAI({
